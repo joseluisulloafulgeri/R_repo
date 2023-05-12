@@ -1,2 +1,34 @@
-# The pool of tears
+# Change file names
+
+This function gets a list of all .csv files in the directory and creates a data frame with these file names. It modifies the file names according to the specified conditions, and finally, renames the files in the directory with the new names.
+
+```{r}
+
+modify_file_names <- function() {
+
+  # Define files
+  # Get a list of all .csv files in the current directory
+  files_dir <- list.files(pattern = "\\.csv$")
+  
+  # Create a data frame with the file names
+  files_dir_df <- data.frame(A = files_dir)
+  
+  # Create a new list of file names with modified names
+  # If the non-digit characters in the file name are 1, prepend '00'
+  # If the non-digit characters in the file name are 2, prepend '0'
+  # Else, leave the file name as is
+  files_dir2 <- ifelse(nchar(gsub("\\D", "", files_dir_df$A))== 1,
+                       gsub("(^[^.]*)","00\\1", files_dir_df$A),
+                       ifelse(nchar(gsub("\\D", "", files_dir_df$A))== 2,
+                              gsub("(^[^.]*)","0\\1", files_dir_df$A),
+                              gsub("(^[^.]*)","\\1", files_dir_df$A)))
+  
+  # Rename the files in the directory with the new names
+  file.rename(files_dir_df$A, files_dir2)
+}
+
+# Call the function
+modify_file_names()
+
+```
 
